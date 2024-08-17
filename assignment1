@@ -1,0 +1,84 @@
+'''
+Assignment 2:
+WAP that first gives 2 options: 
+Sign up
+Sign in
+
+when 1 is pressed user needs to provide following information 
+Username, 2. Password, 3. Mobile number
+All this information is saved in a file everytime a new user signs up the same file is updated 
+(hint Append over the same file)
+
+when 2 is pressed 
+User needs to provide username and password 
+this username and password is checked with username and password in the database
+if matched: 
+welcome to the device and show their phone number 
+else: 
+terminate the program saying incorrect credentials 
+
+
+Do it using json files, save everything to json and load from json 
+
+'''
+
+import json
+
+# File to store user data
+FILE_NAME = 'file1.json'
+
+def load_data():
+    try:
+        with open(FILE_NAME, 'r') as file:
+            data = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("File not found or corrupted. Starting with an empty database.")
+        data = {}
+    return data
+
+def save_data(data):
+    with open(FILE_NAME, 'w') as file:
+        json.dump(data, file)
+
+def signup():
+    data = load_data()
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    
+    if username in data:
+        print("Username already exists!")
+    else:
+        data[username] = password
+        save_data(data)
+        print("Signup successful!")
+
+def login():
+    data = load_data()
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    
+    if username in data and data[username] == password:
+        print("Login successful!")
+    else:
+        print("Login failed!")
+
+def main():
+    while True:
+        print("1) Signup")
+        print("2) Login")
+        print("3) Exit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            signup()
+        elif choice == '2':
+            login()
+        elif choice == '3':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice! Please select 1, 2, or 3.")
+
+if __name__ == "__main__":
+    main()
